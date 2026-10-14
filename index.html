@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ex.07 - Working with jQuery | Meditation Center</title>
+<title>Ex.07 - Working with jQuery | Meditation & Spiritual Center</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
     body {
@@ -11,6 +11,7 @@
         background: #f0ede4;
         color: #2f3e2e;
         padding: 20px;
+        transition: background-color 1.5s;
     }
     h1 {
         color: #4b5d45;
@@ -41,7 +42,7 @@
         border: 1px solid #cfc9b5;
         border-radius: 4px;
     }
-    table td { padding: 3px 8px; }
+    table td { padding: 3px 8px; vertical-align: top; }
 
     #mover {
         width: 40px; height: 40px;
@@ -54,51 +55,63 @@
         background: #dcd7c4;
         position: relative;
     }
-    #fadeBox {
-        width: 100px; height: 100px;
-        background: #6b7a4f;
-        margin-top: 10px;
-    }
+    #fadeBox { width: 100px; height: 100px; background: #6b7a4f; margin-top: 10px; }
     #candle { position: relative; left: 0px; width: 60px; }
     #para1 { font-size: 16px; }
 
-    /* Sample demo box from the manual */
-    #box { background-color: blue; color: white; width: 300px; min-height: 20px; margin-top: 8px; }
+    #box { background-color: #4b5d45; color: white; width: 300px; min-height: 20px; margin-top: 8px; }
 
     .result-line { margin: 4px 0; font-weight: 600; }
+
+    /* Breathing guide */
+    #breathWrap {
+        height: 180px; display: flex; align-items: center; justify-content: center;
+        background: #eef3e8; border-radius: 8px;
+    }
+    #breathCircle {
+        width: 60px; height: 60px; border-radius: 50%;
+        background: radial-gradient(circle, #a7c4a0, #4b5d45);
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-size: 12px; text-align: center;
+    }
+
+    /* Timer */
+    #countdown { font-size: 38px; font-family: Georgia, serif; text-align: center; color: #4b5d45; margin: 10px 0; }
+
+    /* Affirmation */
+    #affirmation { font-style: italic; font-size: 18px; text-align: center; min-height: 50px; }
+
+    /* Lotus studio */
     .swatch {
         width: 28px; height: 28px; border-radius: 50%;
         border: 2px solid #fff; outline: 1px solid #999;
         display: inline-block; cursor: pointer; margin: 3px;
     }
+    #lotusSvg { display: block; margin: 0 auto; width: 70%; background: #1f2a24; border-radius: 8px; }
 </style>
 </head>
 <body>
 
-<h1>Meditation Center</h1>
+<h1>Meditation &amp; Spiritual Center</h1>
 <p style="text-align:center;">Ex.No.07 - Working with jQuery</p>
 
 <!-- ===== PART A : Ex.06 converted to jQuery ===== -->
 
-<!-- 1. DIGITAL CLOCK -->
 <div class="box">
     <h3>Meditation Timer Clock</h3>
     <span id="time"></span>
 </div>
 
-<!-- 2. DYNAMIC BACKGROUND COLOR -->
 <div class="box">
     <h3>Calming Background Shift</h3>
     <p>The page background changes every 3 seconds.</p>
 </div>
 
-<!-- 3. CHANGE STYLE ON BUTTON CLICK -->
 <div class="box">
     <h2 id="title">Breathe In, Breathe Out</h2>
     <button id="styleBtn">Change Style</button>
 </div>
 
-<!-- 4. SHOW AND HIDE -->
 <div class="box">
     <p id="msg">A few quiet minutes can change your whole day.</p>
     <button id="hideBtn">Hide</button>
@@ -106,14 +119,12 @@
     <button id="toggleBtn">Toggle (slow)</button>
 </div>
 
-<!-- 5. MOVING BOX ANIMATION -->
 <div class="box">
     <h3>Floating Mala Bead</h3>
     <div id="container"><div id="mover"></div></div>
     <button id="moveBtn">Start Animation</button>
 </div>
 
-<!-- 6. FADE ANIMATION -->
 <div class="box">
     <h3>Fading Candle Glow</h3>
     <div id="fadeBox"></div>
@@ -121,13 +132,11 @@
     <button id="fadeInBtn">Fade In</button>
 </div>
 
-<!-- 7. FONT SIZE ON MOUSE OVER / OUT -->
 <div class="box">
     <h3>Read More on Hover</h3>
     <p id="para1">Move your cursor over this line to read it clearly.</p>
 </div>
 
-<!-- 8. MOVE AND STOP IMAGE -->
 <div class="box">
     <h3>Move the Candle</h3>
     <img id="candle" src="https://cdn-icons-png.flaticon.com/512/2913/2913136.png" alt="candle">
@@ -136,19 +145,17 @@
     <button id="stopImgBtn">Stop</button>
 </div>
 
-<!-- 9. CLASS AND OBJECT -->
 <div class="box">
     <h3>Class and Object</h3>
     <p id="demo"></p>
 </div>
 
-<!-- 10. ARRAY OF OBJECTS -->
 <div class="box">
     <h3>Practitioner List</h3>
     <div id="practitioners"></div>
 </div>
 
-<!-- ===== PART B : Sample jQuery code from manual (Addition) ===== -->
+<!-- ===== PART B : Sample jQuery code (Addition) ===== -->
 <div class="box">
     <h3>Sample: Addition using jQuery</h3>
     Number1: <input type="text" id="t1"><br>
@@ -158,94 +165,142 @@
     <div id="box"></div>
 </div>
 
-<!-- ===== PART C : Sample Question 1 - Budget Calculator ===== -->
+<!-- ===== PART C : NEW meditation features ===== -->
+
+<!-- Breathing guide -->
 <div class="box">
-    <h3>Q1. Mindful Budget Calculator</h3>
+    <h3>Guided Breathing</h3>
+    <div id="breathWrap"><div id="breathCircle">Ready</div></div>
+    <div style="text-align:center;">
+        <button id="breathStart">Start</button>
+        <button id="breathStop">Stop</button>
+    </div>
+</div>
+
+<!-- Countdown timer -->
+<div class="box">
+    <h3>Meditation Countdown</h3>
+    Minutes:
+    <select id="minSelect">
+        <option value="1">1</option>
+        <option value="5" selected>5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+    </select>
+    <div id="countdown">05:00</div>
+    <div style="text-align:center;">
+        <button id="tStart">Start</button>
+        <button id="tPause">Pause</button>
+        <button id="tReset">Reset</button>
+    </div>
+    <p id="tMsg" style="text-align:center;"></p>
+</div>
+
+<!-- Affirmations -->
+<div class="box">
+    <h3>Daily Affirmation</h3>
+    <p id="affirmation"></p>
+    <div style="text-align:center;"><button id="newAff">New Thought</button></div>
+</div>
+
+<!-- ===== Q1. Retreat Budget Planner ===== -->
+<div class="box">
+    <h3>Q1. Retreat Budget Planner</h3>
     <table>
-        <tr><td>Total Amount (₹)</td><td><input type="number" id="amount" min="0"></td></tr>
-        <tr><td>Room Rent (%)</td><td><input type="number" id="pRent" min="0" max="100"></td>
-            <td><span id="vRent"></span></td></tr>
-        <tr><td>Accessories (%)</td><td><input type="number" id="pAcc" min="0" max="100"></td>
-            <td><span id="vAcc"></span></td></tr>
-        <tr><td>Emergency (%)</td><td><input type="number" id="pEmg" min="0" max="100"></td>
-            <td><span id="vEmg"></span></td></tr>
-        <tr><td>Saving (%)</td><td><input type="number" id="pSav" min="0" max="100"></td>
-            <td><span id="vSav"></span></td></tr>
+        <tr><td>Total Amount (₹)</td><td><input type="number" id="amount" min="0"></td><td></td></tr>
+        <tr><td>Room Rent (%)</td><td><input type="number" id="pRent" min="0" max="100"></td><td><span id="vRent"></span></td></tr>
+        <tr><td>Accessories (%)</td><td><input type="number" id="pAcc" min="0" max="100"></td><td><span id="vAcc"></span></td></tr>
+        <tr><td>Emergency (%)</td><td><input type="number" id="pEmg" min="0" max="100"></td><td><span id="vEmg"></span></td></tr>
+        <tr><td>Saving (%)</td><td><input type="number" id="pSav" min="0" max="100"></td><td><span id="vSav"></span></td></tr>
     </table>
     <button id="evalBtn">Evaluate My Money</button>
 </div>
 
-<!-- ===== PART D : Sample Question 2 - Cake Order ===== -->
+<!-- ===== Q2. Session & Retreat Booking ===== -->
 <div class="box">
-    <h3>Q2. Cake Order (Meditation Center Cafe)</h3>
+    <h3>Q2. Session &amp; Retreat Booking</h3>
     <table>
-        <tr><td>Cake Flavour</td>
+        <tr><td>Program</td>
             <td>
-                <select id="cakeType">
-                    <option value="300">Vanilla - ₹300/kg</option>
-                    <option value="400">Chocolate - ₹400/kg</option>
-                    <option value="450">Black Forest - ₹450/kg</option>
-                    <option value="500">Red Velvet - ₹500/kg</option>
+                <select id="program">
+                    <option value="500">Mindfulness Meditation - ₹500/day</option>
+                    <option value="600">Hatha Yoga - ₹600/day</option>
+                    <option value="800">Sound Healing - ₹800/day</option>
+                    <option value="1500">Silent Retreat - ₹1500/day</option>
                 </select>
             </td></tr>
-        <tr><td>Weight (kg)</td><td><input type="number" id="cakeKg" value="1" min="0.5" step="0.5"></td></tr>
-        <tr><td>Quantity</td><td><input type="number" id="cakeQty" value="1" min="1"></td></tr>
-        <tr><td>Extras</td>
+        <tr><td>Days</td><td><input type="number" id="days" value="1" min="1"></td></tr>
+        <tr><td>Participants</td><td><input type="number" id="people" value="1" min="1"></td></tr>
+        <tr><td>Add-ons</td>
             <td>
-                <label><input type="checkbox" class="extra" value="50"> Candles (₹50)</label><br>
-                <label><input type="checkbox" class="extra" value="100"> Message Topper (₹100)</label><br>
-                <label><input type="checkbox" class="extra" value="150"> Gift Box (₹150)</label>
+                <label><input type="checkbox" class="addon" value="200"> Sattvic Meals (₹200/day)</label><br>
+                <label><input type="checkbox" class="addon" value="400"> Ashram Stay (₹400/day)</label><br>
+                <label><input type="checkbox" class="addon" value="150"> Yoga Mat &amp; Kit (₹150/day)</label>
             </td></tr>
-        <tr><td>Home Delivery</td>
-            <td><label><input type="checkbox" id="delivery"> Yes (₹80)</label></td></tr>
+        <tr><td>Member</td>
+            <td><label><input type="checkbox" id="member"> Center member (10% off)</label></td></tr>
     </table>
-    <button id="orderBtn">Calculate Order</button>
-    <div id="orderResult" style="margin-top:10px;"></div>
+    <button id="bookBtn">Calculate Booking</button>
+    <div id="bookResult" style="margin-top:10px;"></div>
 </div>
 
-<!-- ===== PART E : Sample Question 3 - Car Body Workshop ===== -->
+<!-- ===== Q3. Lotus Mandala Studio ===== -->
 <div class="box">
-    <h3>Q3. Car Body Workshop</h3>
-    <svg id="carSvg" viewBox="0 0 400 200" width="100%" style="background:#e8f1f5; border-radius:6px;">
-        <rect x="0" y="160" width="400" height="40" fill="#b9b39b"/>
-        <!-- body -->
-        <rect id="carBody" x="40" y="90" width="320" height="50" rx="12" fill="#c0392b"/>
-        <!-- roof -->
-        <path id="carRoof" d="M110 90 L145 45 L265 45 L305 90 Z" fill="#c0392b"/>
-        <!-- glass -->
-        <path id="glass1" d="M125 90 L152 53 L195 53 L195 90 Z" fill="#9fd3e6" fill-opacity="0.9"/>
-        <path id="glass2" d="M205 90 L205 53 L258 53 L288 90 Z" fill="#9fd3e6" fill-opacity="0.9"/>
-        <!-- wheels -->
-        <circle class="tyre" cx="115" cy="140" r="25" fill="#222"/>
-        <circle class="rim"  cx="115" cy="140" r="12" fill="#ccc"/>
-        <circle class="tyre" cx="285" cy="140" r="25" fill="#222"/>
-        <circle class="rim"  cx="285" cy="140" r="12" fill="#ccc"/>
+    <h3>Q3. Lotus Mandala Studio</h3>
+    <svg id="lotusSvg" viewBox="0 0 300 300">
+        <g id="petalsOuter" fill="#e67e9a" fill-opacity="0.75">
+            <ellipse cx="150" cy="75"  rx="22" ry="55"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(45 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(90 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(135 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(180 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(225 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(270 150 150)"/>
+            <ellipse cx="150" cy="75"  rx="22" ry="55" transform="rotate(315 150 150)"/>
+        </g>
+        <g id="petalsInner" fill="#e67e9a" fill-opacity="0.9">
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(22 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(67 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(112 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(157 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(202 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(247 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(292 150 150)"/>
+            <ellipse cx="150" cy="105" rx="14" ry="35" transform="rotate(337 150 150)"/>
+        </g>
+        <circle id="lotusCore" cx="150" cy="150" r="16" fill="#f1c40f"/>
     </svg>
     <p>
-        <strong>Car Colour:</strong><br>
-        <span class="swatch" data-color="#c0392b" style="background:#c0392b"></span>
-        <span class="swatch" data-color="#2980b9" style="background:#2980b9"></span>
-        <span class="swatch" data-color="#27ae60" style="background:#27ae60"></span>
-        <span class="swatch" data-color="#f1c40f" style="background:#f1c40f"></span>
-        <span class="swatch" data-color="#2c3e50" style="background:#2c3e50"></span>
-        <span class="swatch" data-color="#ecf0f1" style="background:#ecf0f1"></span>
+        <strong>Chakra Colour:</strong><br>
+        <span class="swatch" data-color="#c0392b" title="Root"         style="background:#c0392b"></span>
+        <span class="swatch" data-color="#e67e22" title="Sacral"       style="background:#e67e22"></span>
+        <span class="swatch" data-color="#f1c40f" title="Solar Plexus" style="background:#f1c40f"></span>
+        <span class="swatch" data-color="#27ae60" title="Heart"        style="background:#27ae60"></span>
+        <span class="swatch" data-color="#3498db" title="Throat"       style="background:#3498db"></span>
+        <span class="swatch" data-color="#4b0082" title="Third Eye"    style="background:#4b0082"></span>
+        <span class="swatch" data-color="#9b59b6" title="Crown"        style="background:#9b59b6"></span>
+    </p>
+    <p id="chakraName" style="font-style:italic;"></p>
+    <p>
+        <strong>Aura Glow:</strong>
+        <input type="range" id="glow" min="0" max="40" value="10">
+        <span id="glowVal">10</span>
     </p>
     <p>
-        <strong>Glass Tint:</strong>
-        <input type="range" id="tint" min="0" max="90" value="10">
-        <span id="tintVal">10</span>%
+        <strong>Mandala Size:</strong>
+        <input type="range" id="lotusSize" min="30" max="100" value="70">
+        <span id="sizeVal">70</span>%
     </p>
-    <p>
-        <strong>Tyre Size:</strong>
-        <input type="range" id="tyreSize" min="18" max="36" value="25">
-        <span id="tyreVal">25</span>
-    </p>
+    <button id="spinBtn">Spin</button>
+    <button id="stopSpinBtn">Stop</button>
 </div>
 
 <script>
 $(document).ready(function () {
 
-    /* ---------- 1. Clock ---------- */
+    /* ---------- Ex.06 features in jQuery ---------- */
+
+    // Clock
     function display() {
         var d = new Date();
         $("#time").html(d.getHours() + " : " + d.getMinutes() + " : " + d.getSeconds());
@@ -253,65 +308,57 @@ $(document).ready(function () {
     display();
     setInterval(display, 1000);
 
-    /* ---------- 2. Background colour every 3s ---------- */
+    // Soft background shift every 3s (light pastel shades so text stays readable)
     setInterval(function () {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
+        var r = 200 + Math.floor(Math.random() * 55);
+        var g = 200 + Math.floor(Math.random() * 55);
+        var b = 200 + Math.floor(Math.random() * 55);
         $("body").css("background-color", "rgb(" + r + "," + g + "," + b + ")");
     }, 3000);
 
-    /* ---------- 3. Change style ---------- */
+    // Change style
     $("#styleBtn").click(function () {
-        $("#title").css({
-            "color": "#4b5d45",
-            "font-size": "30px",
-            "background-color": "#dcd7c4"
-        });
+        $("#title").css({ "color": "#4b5d45", "font-size": "30px", "background-color": "#dcd7c4" });
     });
 
-    /* ---------- 4. Show / Hide ---------- */
+    // Show / hide
     $("#hideBtn").click(function () { $("#msg").hide(); });
     $("#showBtn").click(function () { $("#msg").show(); });
     $("#toggleBtn").click(function () { $("#msg").toggle(1000); });
 
-    /* ---------- 5. Moving bead ---------- */
+    // Moving bead
     $("#moveBtn").click(function () {
         $("#mover").css("left", "0px").animate({ left: "250px" }, 2500);
     });
 
-    /* ---------- 6. Fade ---------- */
+    // Fade
     $("#fadeOutBtn").click(function () { $("#fadeBox").fadeOut(1000); });
     $("#fadeInBtn").click(function () { $("#fadeBox").fadeIn(1000); });
 
-    /* ---------- 7. Hover font size ---------- */
+    // Hover font size
     $("#para1").hover(
         function () { $(this).css("font-size", "28px"); },
         function () { $(this).css("font-size", "16px"); }
     );
 
-    /* ---------- 8. Move and stop image ---------- */
+    // Move and stop image
     var animate;
     function moveRight() {
         var left = parseInt($("#candle").css("left")) || 0;
         $("#candle").css("left", (left + 1) + "px");
         animate = setTimeout(moveRight, 10);
     }
-    $("#moveImgBtn").click(function () {
-        clearTimeout(animate);
-        moveRight();
-    });
+    $("#moveImgBtn").click(function () { clearTimeout(animate); moveRight(); });
     $("#stopImgBtn").click(function () { clearTimeout(animate); });
 
-    /* ---------- 9. Class and object ---------- */
+    // Class and object
     class Session {
         constructor(name) { this.sessionName = name; }
         present() { return "Today's session is " + this.sessionName; }
     }
-    var item = new Session("Breathing Meditation");
-    $("#demo").html(item.present());
+    $("#demo").html(new Session("Breathing Meditation").present());
 
-    /* ---------- 10. Array of objects ---------- */
+    // Array of objects
     var practitioner = [
         { name: "Anita", regno: "UR13CS101", year: 1998 },
         { name: "Rahul", regno: "UR13CS102", year: 2003 }
@@ -323,7 +370,7 @@ $(document).ready(function () {
     });
     $("#practitioners").html(output);
 
-    /* ---------- Sample: Addition ---------- */
+    /* ---------- Sample addition ---------- */
     $('#btn').click(function () {
         let num1 = parseInt($('#t1').val());
         let num2 = parseInt($('#t2').val());
@@ -332,7 +379,88 @@ $(document).ready(function () {
         $('#box').html("Result: " + sum);
     });
 
-    /* ---------- Q1. Budget Calculator ---------- */
+    /* ---------- Guided breathing ---------- */
+    var breathing = false;
+    function breatheCycle() {
+        if (!breathing) return;
+        $("#breathCircle").text("Inhale")
+            .animate({ width: "150px", height: "150px" }, 4000, function () {
+                if (!breathing) return;
+                $("#breathCircle").text("Hold");
+                $("#breathCircle").delay(2000).queue(function (next) {
+                    if (!breathing) { next(); return; }
+                    $(this).text("Exhale");
+                    next();
+                }).animate({ width: "60px", height: "60px" }, 4000, breatheCycle);
+            });
+    }
+    $("#breathStart").click(function () {
+        if (breathing) return;
+        breathing = true;
+        breatheCycle();
+    });
+    $("#breathStop").click(function () {
+        breathing = false;
+        $("#breathCircle").stop(true).animate({ width: "60px", height: "60px" }, 500).text("Ready");
+    });
+
+    /* ---------- Meditation countdown ---------- */
+    var secsLeft = 300, tick = null;
+    function showTime() {
+        var m = Math.floor(secsLeft / 60), s = secsLeft % 60;
+        $("#countdown").text((m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s);
+    }
+    $("#minSelect").change(function () {
+        clearInterval(tick); tick = null;
+        secsLeft = parseInt($(this).val()) * 60;
+        $("#tMsg").text("");
+        showTime();
+    });
+    $("#tStart").click(function () {
+        if (tick) return;
+        $("#tMsg").text("Settle in... focus on your breath.");
+        tick = setInterval(function () {
+            secsLeft--;
+            showTime();
+            if (secsLeft <= 0) {
+                clearInterval(tick); tick = null;
+                $("#tMsg").text("Session complete. Namaste 🙏");
+                $("#countdown").fadeOut(300).fadeIn(300).fadeOut(300).fadeIn(300);
+            }
+        }, 1000);
+    });
+    $("#tPause").click(function () {
+        clearInterval(tick); tick = null;
+        $("#tMsg").text("Paused");
+    });
+    $("#tReset").click(function () {
+        clearInterval(tick); tick = null;
+        secsLeft = parseInt($("#minSelect").val()) * 60;
+        $("#tMsg").text("");
+        showTime();
+    });
+
+    /* ---------- Affirmations ---------- */
+    var thoughts = [
+        "I am calm, present and at peace.",
+        "With every breath, I let go of tension.",
+        "The stillness within me is my strength.",
+        "I choose peace over worry.",
+        "I am grateful for this moment.",
+        "Silence is where clarity begins."
+    ];
+    var idx = 0;
+    function showThought() {
+        $("#affirmation").fadeOut(400, function () {
+            $(this).text(thoughts[idx]).fadeIn(400);
+        });
+        idx = (idx + 1) % thoughts.length;
+    }
+    $("#affirmation").text(thoughts[0]);
+    idx = 1;
+    $("#newAff").click(showThought);
+
+    /* ---------- Q1. Retreat Budget Planner ---------- */
     $("#evalBtn").click(function () {
         var amount = parseFloat($("#amount").val());
         var rent = parseFloat($("#pRent").val());
@@ -344,67 +472,95 @@ $(document).ready(function () {
             alert("Please fill in the amount and all percentage fields.");
             return;
         }
-
         var total = rent + acc + emg + sav;
         if (total !== 100) {
             alert("The amount cannot be divided! Percentages add up to " + total + "%, they must total 100%.");
             $("#vRent, #vAcc, #vEmg, #vSav").text("");
             return;
         }
-
         $("#vRent").text("= ₹ " + (amount * rent / 100).toFixed(2));
         $("#vAcc").text("= ₹ " + (amount * acc / 100).toFixed(2));
         $("#vEmg").text("= ₹ " + (amount * emg / 100).toFixed(2));
         $("#vSav").text("= ₹ " + (amount * sav / 100).toFixed(2));
     });
 
-    /* ---------- Q2. Cake Order ---------- */
-    $("#orderBtn").click(function () {
-        var price = parseFloat($("#cakeType").val());
-        var flavour = $("#cakeType option:selected").text().split(" - ")[0];
-        var kg = parseFloat($("#cakeKg").val());
-        var qty = parseInt($("#cakeQty").val());
+    /* ---------- Q2. Session & Retreat Booking ---------- */
+    $("#bookBtn").click(function () {
+        var rate = parseFloat($("#program").val());
+        var program = $("#program option:selected").text().split(" - ")[0];
+        var days = parseInt($("#days").val());
+        var people = parseInt($("#people").val());
 
-        if (isNaN(kg) || isNaN(qty) || kg <= 0 || qty <= 0) {
-            alert("Enter a valid weight and quantity.");
+        if (isNaN(days) || isNaN(people) || days <= 0 || people <= 0) {
+            alert("Enter valid number of days and participants.");
             return;
         }
 
-        var cakeCost = price * kg * qty;
-        var extras = 0;
-        $(".extra:checked").each(function () { extras += parseFloat($(this).val()); });
-        var delivery = $("#delivery").is(":checked") ? 80 : 0;
-        var total = cakeCost + extras + delivery;
+        var perDayAddons = 0;
+        $(".addon:checked").each(function () { perDayAddons += parseFloat($(this).val()); });
 
-        $("#orderResult").html(
-            "<div class='result-line'>" + flavour + " cake: ₹" + cakeCost.toFixed(2) + "</div>" +
-            "<div class='result-line'>Extras: ₹" + extras.toFixed(2) + "</div>" +
-            "<div class='result-line'>Delivery: ₹" + delivery.toFixed(2) + "</div>" +
+        var programCost = rate * days * people;
+        var addonCost = perDayAddons * days * people;
+        var subtotal = programCost + addonCost;
+        var discount = $("#member").is(":checked") ? subtotal * 0.10 : 0;
+        var total = subtotal - discount;
+
+        $("#bookResult").html(
+            "<div class='result-line'>" + program + ": ₹" + programCost.toFixed(2) + "</div>" +
+            "<div class='result-line'>Add-ons: ₹" + addonCost.toFixed(2) + "</div>" +
+            "<div class='result-line'>Member discount: -₹" + discount.toFixed(2) + "</div>" +
             "<div class='result-line' style='color:#4b5d45;font-size:18px;'>Total: ₹" + total.toFixed(2) + "</div>"
         );
     });
 
-    /* ---------- Q3. Car Body Workshop ---------- */
+    /* ---------- Q3. Lotus Mandala Studio ---------- */
+    var currentColor = "#e67e9a";
+    var chakras = {
+        "#c0392b": "Root Chakra - grounding and stability",
+        "#e67e22": "Sacral Chakra - creativity and flow",
+        "#f1c40f": "Solar Plexus - confidence and will",
+        "#27ae60": "Heart Chakra - love and compassion",
+        "#3498db": "Throat Chakra - expression and truth",
+        "#4b0082": "Third Eye - intuition and insight",
+        "#9b59b6": "Crown Chakra - awareness and connection"
+    };
+
+    function applyGlow() {
+        var g = $("#glow").val();
+        $("#lotusSvg").css("filter", "drop-shadow(0 0 " + g + "px " + currentColor + ")");
+    }
+    applyGlow();
+
     $(".swatch").click(function () {
-        var c = $(this).data("color");
-        $("#carBody, #carRoof").attr("fill", c);
+        currentColor = $(this).data("color");
+        $("#petalsOuter, #petalsInner").attr("fill", currentColor);
+        $("#chakraName").text(chakras[currentColor]);
+        applyGlow();
     });
 
-    $("#tint").on("input", function () {
+    $("#glow").on("input", function () {
+        $("#glowVal").text($(this).val());
+        applyGlow();
+    });
+
+    $("#lotusSize").on("input", function () {
         var v = $(this).val();
-        $("#tintVal").text(v);
-        // darker tint -> glass turns dark, less transparent
-        var shade = Math.round(211 - (v / 100) * 190);
-        $("#glass1, #glass2").attr("fill", "rgb(" + (shade - 60 < 0 ? 0 : shade - 60) + "," + shade + "," + (shade + 20 > 255 ? 255 : shade + 20) + ")");
-        $("#glass1, #glass2").attr("fill-opacity", 0.9);
+        $("#sizeVal").text(v);
+        $("#lotusSvg").css("width", v + "%");
     });
 
-    $("#tyreSize").on("input", function () {
-        var r = parseInt($(this).val());
-        $("#tyreVal").text(r);
-        $(".tyre").attr({ r: r, cy: 165 - r });
-        $(".rim").attr({ r: Math.round(r / 2), cy: 165 - r });
+    var spinAngle = 0, spinTimer = null;
+    $("#spinBtn").click(function () {
+        if (spinTimer) return;
+        spinTimer = setInterval(function () {
+            spinAngle = (spinAngle + 1) % 360;
+            $("#petalsOuter, #petalsInner, #lotusCore").css({
+                "transform": "rotate(" + spinAngle + "deg)",
+                "transform-origin": "150px 150px"
+            });
+        }, 30);
     });
+    $("#stopSpinBtn").click(function () { clearInterval(spinTimer); spinTimer = null; });
 });
 </script>
 
